@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="js/game.js"></script>
+  <script src="js/material.js"></script>
+  <script src="js/math.js"></script>
+  <link rel="stylesheet" type="text/css" href="engine.css">
+
+  <script>
+    // function exectured when the window has loaded
+    // window represents the browser's window and is the highest member of the BOM
+    window.addEventListener("load", function () {
+      // global variables are properties of the window object
+      window.game = new Game();
+      // initial size
+      window.game.resize(
+        window.innerWidth,
+        window.innerHeight
+      );
+      loop();
+    });
+
+    // resize window
+    window.addEventListener("resize", function () {
+      window.game.resize(
+        window.innerWidth,
+        window.innerHeight
+      );
+    });
+  </script>
+
+  <script type="vertext_shader" id="vs">
+    attribute vec2 a_position;
+    attribute vec2 a_texCoord;
+
+    uniform mat3 u_world;
+    uniform mat3 u_object;
+    uniform vec2 u_frame;
+
+    varying vec2 v_texCoord;
+    void main(){
+      gl_Position = vec4( u_world * u_object * vec3(a_position, 1), 1);
+      v_texCoord = a_texCoord + u_frame;
+    }
+  </script>
+
+  <script type="fragment_shader" id="fs">
+    precision mediump float;
+    uniform sampler2D u_image;
+    uniform vec4 u_color;
+    varying vec2 v_texCoord;
+
+    void main(){
+      gl_FragColor = u_color * texture2D(u_image, v_texCoord);
+    }
+  </script>
+</head>
+<body>
+</body>
+</html>
